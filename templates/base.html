@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>{% block title %}Student Hub — Learn smarter{% endblock %}</title>
+  <meta name="description" content="{% block description %}Student Hub is your friendly study workspace for AI tutoring, search, calculators and practical student tools.{% endblock %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="{{ url_for('main.index') }}" aria-label="Student Hub home">
+        <span class="brand-mark">SH</span>
+        <span><strong class="brand-name">Student Hub</strong><small>Learn smarter</small></span>
+      </a>
+      <button class="nav-toggle icon-btn" id="nav-toggle" aria-label="Open navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="main-nav">
+        <a href="{{ url_for('main.index') }}">Home</a>
+        <a href="{{ url_for('main.index') }}#tools">Tools</a>
+        <a href="{{ url_for('main.calculators') }}">Calculators</a>
+        <a href="{{ url_for('search.search_page') }}">Search</a>
+        <a class="nav-ai" href="{{ url_for('teddy.chat_page') }}">✨ AI Teddy</a>
+      </nav>
+      <div class="header-actions">
+        {% if current_user %}
+          {% if current_user.email|lower in config.ADMIN_EMAILS.lower().split(',') %}<a class="header-link admin-link" href="{{ url_for('main.admin_users') }}">Users</a>{% endif %}
+          <a class="user-pill" href="{{ url_for('main.profile') }}"><span class="avatar-mini">{{ (current_user.name or current_user.email)[0]|upper }}</span><span>Hi, {{ current_user.name.split(' ')[0] if current_user.name else 'there' }} 👋</span></a>
+          <a class="header-link" href="{{ url_for('main.logout') }}">Log out</a>
+        {% else %}
+          <a class="header-link" href="{{ url_for('main.login') }}">Log in</a>
+          <a class="header-cta" href="{{ url_for('main.signup') }}">Create Account</a>
+        {% endif %}
+        <button id="theme-toggle" class="icon-btn theme-btn" aria-label="Toggle dark mode" title="Toggle dark mode">☼</button>
+      </div>
+    </div>
+  </header>
+
+  <main>{% block content %}{% endblock %}</main>
+
+  <div class="auth-modal" id="auth-modal" hidden aria-hidden="true">
+    <div class="auth-modal-backdrop" data-close-auth></div>
+    <section class="auth-modal-card" role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+      <button class="modal-close" type="button" data-close-auth aria-label="Close">×</button>
+      <div class="modal-icon">🔐</div>
+      <span class="eyebrow-pill">AI TEDDY</span>
+      <h2 id="auth-modal-title">Unlock your AI Teddy</h2>
+      <p>You're one step away from personalized explanations, practice questions, flashcards and exam notes.</p>
+      <div class="modal-benefits"><span>✨ Step-by-step help</span><span>🧠 Practice questions</span><span>📚 Exam notes</span><span>🗂️ Smart flashcards</span></div>
+      <div class="modal-actions"><a class="primary-btn" id="modal-signup" href="{{ url_for('main.signup') }}">Create Free Account</a><a class="secondary-btn" id="modal-login" href="{{ url_for('main.login') }}">Log In</a></div>
+      <button class="modal-later" type="button" data-close-auth>Maybe later</button>
+    </section>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div><span class="brand-mark small">SH</span><strong> Student Hub</strong><p>Your personal space to learn, solve, practice and improve.</p></div>
+      <div class="footer-links"><a href="{{ url_for('main.index') }}#tools">Tools</a><a href="{{ url_for('main.calculators') }}">Calculators</a><a href="{{ url_for('search.search_page') }}">Search</a>{% if current_user %}<a href="{{ url_for('main.profile') }}">Profile</a>{% endif %}</div>
+    </div>
+    <p class="footer-bottom">Study smarter, not harder. Always verify important academic information with your course material.</p>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Page not found — Student Hub{% endblock %}
+{% block content %}
+<section class="error-page">
+  <p class="error-code">404</p>
+  <h1>This page wandered off.</h1>
+  <p>The page you're looking for doesn't exist. Try searching for a topic instead.</p>
+  <a class="primary-btn" href="{{ url_for('main.index') }}">Back to Student Hub</a>
+</section>
+{% endblock %}

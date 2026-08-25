@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% block title %}Calculators — Student Hub{% endblock %}
+{% block content %}
+
+<section class="calc-page">
+  <div class="calc-inner">
+    <div class="section-head">
+      <span class="section-tab">tools</span>
+      <h1>Calculators</h1>
+    </div>
+
+    <nav class="calc-tabs">
+      <a href="#gpa">GPA / CGPA</a>
+      <a href="#percentage">Percentage</a>
+      <a href="#attendance">Attendance</a>
+      <a href="#age">Age</a>
+      <a href="#converter">Unit Converter</a>
+      <a href="#scientific">Scientific</a>
+    </nav>
+
+    <!-- GPA / CGPA -->
+    <article class="calc-card" id="gpa">
+      <div class="calc-card-tab">🎓 GPA / CGPA Calculator</div>
+      <p class="calc-hint">Choose a grading scale, add your subjects, and calculate.</p>
+      <div class="calc-row">
+        <label for="grade-scale">Grading scale</label>
+        <select id="grade-scale">
+          <option value="10">10-point scale (A+=10 ... F=0)</option>
+          <option value="4">4.0-point scale (A=4.0 ... F=0)</option>
+        </select>
+      </div>
+      <div id="subject-rows" class="subject-rows"></div>
+      <button class="ghost-btn" id="add-subject">+ Add subject</button>
+      <div class="calc-actions">
+        <button class="primary-btn" id="calc-gpa">Calculate GPA</button>
+      </div>
+      <div class="calc-result" id="gpa-result" hidden></div>
+    </article>
+
+    <!-- Percentage -->
+    <article class="calc-card" id="percentage">
+      <div class="calc-card-tab">% Percentage Calculator</div>
+      <div class="calc-row two-col">
+        <div><label for="marks-obtained">Marks obtained</label><input type="number" id="marks-obtained" step="any"></div>
+        <div><label for="marks-total">Total marks</label><input type="number" id="marks-total" step="any"></div>
+      </div>
+      <button class="primary-btn" id="calc-percentage">Calculate</button>
+      <div class="calc-result" id="percentage-result" hidden></div>
+
+      <hr class="calc-divider">
+      <p class="calc-hint">Percentage increase / decrease</p>
+      <div class="calc-row two-col">
+        <div><label for="value-old">Old value</label><input type="number" id="value-old" step="any"></div>
+        <div><label for="value-new">New value</label><input type="number" id="value-new" step="any"></div>
+      </div>
+      <button class="primary-btn" id="calc-change">Calculate Change</button>
+      <div class="calc-result" id="change-result" hidden></div>
+    </article>
+
+    <!-- Attendance -->
+    <article class="calc-card" id="attendance">
+      <div class="calc-card-tab">📅 Attendance Calculator</div>
+      <div class="calc-row two-col">
+        <div><label for="classes-total">Total classes</label><input type="number" id="classes-total" min="0"></div>
+        <div><label for="classes-attended">Classes attended</label><input type="number" id="classes-attended" min="0"></div>
+      </div>
+      <div class="calc-row">
+        <label for="attendance-target">Target attendance %</label>
+        <input type="number" id="attendance-target" value="75" min="0" max="100">
+      </div>
+      <button class="primary-btn" id="calc-attendance">Calculate</button>
+      <div class="calc-result" id="attendance-result" hidden></div>
+    </article>
+
+    <!-- Age -->
+    <article class="calc-card" id="age">
+      <div class="calc-card-tab">🎂 Age Calculator</div>
+      <div class="calc-row">
+        <label for="dob">Date of birth</label>
+        <input type="date" id="dob">
+      </div>
+      <button class="primary-btn" id="calc-age">Calculate Age</button>
+      <div class="calc-result" id="age-result" hidden></div>
+    </article>
+
+    <!-- Unit Converter -->
+    <article class="calc-card" id="converter">
+      <div class="calc-card-tab">🔁 Unit Converter</div>
+      <div class="calc-row">
+        <label for="conv-category">Category</label>
+        <select id="conv-category"></select>
+      </div>
+      <div class="calc-row two-col">
+        <div>
+          <label for="conv-from">From</label>
+          <select id="conv-from"></select>
+        </div>
+        <div>
+          <label for="conv-to">To</label>
+          <select id="conv-to"></select>
+        </div>
+      </div>
+      <div class="calc-row">
+        <label for="conv-value">Value</label>
+        <input type="number" id="conv-value" value="1" step="any">
+      </div>
+      <div class="calc-result" id="converter-result">—</div>
+    </article>
+
+    <!-- Scientific Calculator -->
+    <article class="calc-card" id="scientific">
+      <div class="calc-card-tab">🧮 Scientific Calculator</div>
+      <input type="text" id="sci-display" class="sci-display" readonly value="0">
+      <div class="sci-grid" id="sci-grid"></div>
+    </article>
+
+  </div>
+</section>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/calculators.js') }}"></script>
+{% endblock %}

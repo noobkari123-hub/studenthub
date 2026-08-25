@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Something went wrong — Student Hub{% endblock %}
+{% block content %}
+<section class="error-page">
+  <p class="error-code">500</p>
+  <h1>Something went wrong on our end.</h1>
+  <p>Please try again in a moment. If this keeps happening, try a different search.</p>
+  <a class="primary-btn" href="{{ url_for('main.index') }}">Back to Student Hub</a>
+</section>
+{% endblock %}

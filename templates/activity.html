@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block title %}Study Activity — Student Hub{% endblock %}
+{% block content %}
+<section class="page-shell"><div class="section-heading"><span class="eyebrow-pill">YOUR ACCOUNT</span><h1>Study activity</h1><p>Recent successful sign-ins to your Student Hub account.</p></div><div class="activity-card"><div class="activity-summary"><div class="activity-avatar">{{ (user.name or user.email)[0]|upper }}</div><div><h2>{{ user.name }}</h2><p>{{ user.email }}</p></div></div><div class="activity-list">{% for event in login_events %}<div class="activity-row"><span class="activity-method">{{ 'G' if event.login_method == 'google' else '✉️' }}</span><div><strong>{{ event.login_method|title }} sign-in</strong><small>{{ event.logged_in_at|replace('T',' ')|replace('+00:00',' UTC') }}</small></div><span class="activity-device">{{ event.ip_address or 'Local network' }}</span></div>{% else %}<p>No login activity yet.</p>{% endfor %}</div></div></section>
+{% endblock %}

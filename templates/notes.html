@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Notes Organizer — Student Hub{% endblock %}
+{% block content %}
+<section class="calc-page"><div class="calc-inner">
+  <div class="section-head"><span class="section-tab">notes</span><h1>Notes Organizer</h1></div>
+  <p class="calc-hint">Create, edit, search and delete personal notes. Notes are stored locally in your browser, so no account is required.</p>
+  <article class="calc-card"><div class="calc-row"><label>Title</label><input id="n-title" placeholder="Chapter 1 — Business Studies"></div><div class="calc-row"><label>Content</label><textarea id="n-content" rows="8" placeholder="Write your notes..."></textarea></div><button class="primary-btn" id="n-save">Save note</button></article>
+  <article class="calc-card"><div class="calc-row"><label>Search notes</label><input id="n-search" placeholder="Search by title or content"></div><div id="n-list" class="notes-organizer-list"></div></article>
+</div></section>
+{% endblock %}
+{% block scripts %}<script>
+(function(){const key='sh-notes';let notes=JSON.parse(localStorage.getItem(key)||'[]');const title=document.getElementById('n-title'),content=document.getElementById('n-content'),list=document.getElementById('n-list');function save(){localStorage.setItem(key,JSON.stringify(notes));render();}function render(){const q=document.getElementById('n-search').value.toLowerCase();const visible=notes.filter(n=>(n.title+' '+n.content).toLowerCase().includes(q));list.innerHTML=visible.length?visible.map(n=>`<div class="note-item"><h3>${n.title}</h3><p>${n.content.replace(/\n/g,'<br>')}</p><button class="ghost-btn" data-id="${n.id}">Delete</button></div>`).join(''):'<p class="calc-hint">No notes found.</p>';list.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>{notes=notes.filter(n=>n.id!==b.dataset.id);save();});}document.getElementById('n-save').onclick=()=>{if(!title.value.trim()||!content.value.trim())return alert('Add a title and some content.');notes.unshift({id:String(Date.now()),title:title.value.trim(),content:content.value.trim()});title.value='';content.value='';save();};document.getElementById('n-search').oninput=render;render();})();
+</script>{% endblock %}

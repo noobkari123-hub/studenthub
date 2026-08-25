@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+{% block title %}AI Teddy — Student Hub{% endblock %}
+{% block description %}AI Teddy is Student Hub's free conversational AI study companion for students.{% endblock %}
+{% block content %}
+<div class="teddy-app" id="teddy-app" data-logged-in="{{ 'true' if current_user else 'false' }}">
+  <aside class="teddy-sidebar" id="teddy-sidebar" aria-label="AI Teddy conversations">
+    <div class="teddy-sidebar-top">
+      <div class="teddy-brand-row"><div class="teddy-mark">🧸</div><div><strong>AI Teddy</strong><small>Free for students 🎓</small></div></div>
+      {% if current_user %}<button class="teddy-new-chat" id="new-chat"><span>＋</span> New Chat</button>{% endif %}
+    </div>
+    {% if current_user %}
+      <div class="teddy-history" id="teddy-history">
+        {% if chats %}
+          <div class="history-label">Your conversations</div>
+          {% for chat in chats %}
+          <button class="history-item{% if active_chat and chat.id == active_chat.id %} active{% endif %}" data-chat-id="{{ chat.id }}" title="{{ chat.title }}"><span>💬</span><span class="history-title">{{ chat.title }}</span></button>
+          {% endfor %}
+        {% else %}
+          <div class="history-empty"><span>📝</span><p>Your chats will appear here.</p><small>Start a new conversation with Teddy.</small></div>
+        {% endif %}
+      </div>
+      <div class="teddy-sidebar-bottom"><a href="{{ url_for('main.profile') }}">Profile</a><a href="{{ url_for('main.activity') }}">My Activity</a></div>
+    {% else %}
+      <div class="teddy-sidebar-login"><span>🔐</span><strong>Log in to chat</strong><p>Your conversations are saved privately to your account.</p><a class="primary-btn" href="{{ url_for('main.login', next=url_for('teddy.chat_page')) }}">Log in</a><a class="secondary-btn" href="{{ url_for('main.signup', next=url_for('teddy.chat_page')) }}">Create free account</a></div>
+    {% endif %}
+  </aside>
+
+  <section class="teddy-main">
+    <header class="teddy-chat-header">
+      <button class="teddy-menu" id="teddy-menu" aria-label="Open conversations">☰</button>
+      <div class="teddy-header-avatar">🧸</div>
+      <div class="teddy-header-copy"><strong>AI Teddy</strong><span>Free for students · Your study companion</span></div>
+      <div class="teddy-header-actions">
+        {% if current_user %}<button class="teddy-icon-btn" id="rename-chat" title="Rename chat" aria-label="Rename chat">✎</button><button class="teddy-icon-btn danger" id="delete-chat" title="Delete chat" aria-label="Delete chat">⌫</button>{% endif %}
+      </div>
+    </header>
+
+    <main class="teddy-conversation" id="teddy-conversation">
+      {% if not current_user %}
+        <section class="teddy-welcome">
+          <div class="teddy-welcome-mark">🧸</div>
+          <span class="eyebrow-pill">AI TEDDY · FREE FOR STUDENTS 🎓</span>
+          <h1>Meet Teddy.</h1>
+          <p>Your friendly AI study companion for understanding difficult topics, solving problems, practicing for exams, and learning one step at a time.</p>
+          <div class="teddy-prompt-grid"><div>💡 Explain a difficult topic</div><div>🧮 Solve a problem</div><div>📝 Prepare for an exam</div><div>🧠 Quiz me</div></div>
+          <div class="teddy-welcome-actions"><a class="primary-btn" href="{{ url_for('main.signup', next=url_for('teddy.chat_page')) }}">Create free account</a><a class="secondary-btn" href="{{ url_for('main.login', next=url_for('teddy.chat_page')) }}">Log in</a></div>
+        </section>
+      {% elif not active_chat %}
+        <section class="teddy-welcome" id="empty-welcome">
+          <div class="teddy-welcome-mark">🧸</div>
+          <span class="eyebrow-pill">AI TEDDY · FREE FOR STUDENTS 🎓</span>
+          <h1>What are we learning today?</h1>
+          <p>Ask Teddy anything about your studies. You can keep each subject in its own conversation.</p>
+          <div class="teddy-prompt-grid"><button data-prompt="Explain integration in a simple way.">💡 Explain a difficult topic</button><button data-prompt="Solve 2x + 5 = 15 step by step.">🧮 Solve a problem</button><button data-prompt="Help me make a study plan for my next exam.">📝 Prepare for an exam</button><button data-prompt="Quiz me on recursion in Python.">🧠 Quiz me</button></div>
+        </section>
+      {% else %}
+        <div class="teddy-message-list" id="teddy-message-list">
+          {% for message in messages %}
+          <article class="teddy-message {{ message.sender }}" data-message-id="{{ message.id }}">
+            <div class="message-avatar">{% if message.sender == 'teddy' %}🧸{% else %}{{ (current_user.name or current_user.email)[0]|upper }}{% endif %}</div>
+            <div class="message-body"><div class="message-name">{% if message.sender == 'teddy' %}Teddy{% else %}You{% endif %}</div><div class="message-content">{{ message.content }}</div></div>
+          </article>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </main>
+
+    {% if current_user %}
+    <div class="teddy-composer-wrap">
+      <div class="teddy-composer-tools"><button class="browse-toggle" id="browse-toggle" type="button" aria-pressed="false">🌐 Browse web <span>optional</span></button><span>Shift + Enter for a new line</span></div>
+      <form class="teddy-composer" id="teddy-composer">
+        <textarea id="teddy-input" rows="1" maxlength="12000" placeholder="Ask Teddy anything about your studies..." aria-label="Message AI Teddy"></textarea>
+        <button type="submit" class="teddy-send" id="teddy-send" aria-label="Send message">↑</button>
+      </form>
+      <p class="teddy-disclaimer">AI Teddy is free for students. Check important academic answers against your course material.</p>
+    </div>
+    {% endif %}
+  </section>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+  window.MathJax = {
+    tex: {
+      inlineMath: [["\\(", "\\)"], ["$", "$"]],
+      displayMath: [["\\[", "\\]"], ["$$", "$$"]],
+      processEscapes: true,
+      packages: { "[+]": ["ams"] }
+    },
+    options: {
+      skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+    },
+    startup: {
+      typeset: false
+    }
+  };
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js"></script>
+<script src="{{ url_for('static', filename='js/teddy.js') }}"></script>
+{% endblock %}

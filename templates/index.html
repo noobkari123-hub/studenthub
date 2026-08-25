@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Student Hub — Study smarter. Understand faster.{% endblock %}
+{% block content %}
+<section class="hero-modern">
+  <div class="hero-glow glow-one"></div><div class="hero-glow glow-two"></div>
+  <div class="hero-content">
+    <span class="eyebrow-pill">🎓 YOUR EVERYDAY STUDY WORKSPACE</span>
+    <h1>Study smarter.<br><span>Understand faster.</span> 🚀</h1>
+    <p>Your all-in-one student workspace for solving problems, understanding difficult topics, practicing questions and getting things done.</p>
+    <div class="hero-actions"><a class="hero-primary" href="{{ url_for('teddy.chat_page') }}">✨ Chat with AI Teddy <span>→</span></a><a class="hero-secondary" href="#tools">Explore Tools</a></div>
+    <div class="hero-proof"><span>⚡ Fast tools</span><span>🧠 Friendly AI tutor</span><span>📱 Works everywhere</span></div>
+  </div>
+  <div class="hero-visual">
+    <div class="study-card floating-card card-back"><span>📚</span><b>Exam Notes</b><small>Ready when you are</small></div>
+    <div class="study-card ai-preview"><div class="ai-avatar">🧸</div><div><span class="mini-label">AI TEDDY</span><h3>Hey! What are you learning today?</h3><p>I'll break it down step by step. 😊</p></div><div class="ai-wave"><i></i><i></i><i></i><i></i><i></i></div></div>
+    <div class="study-card floating-card card-front"><span>🎯</span><b>Practice</b><small>Easy → Medium → Hard</small></div>
+  </div>
+</section>
+
+<section class="ai-section" id="ai-teddy">
+  <div class="section-container">
+    <div class="section-heading centered"><span class="eyebrow-pill">🧠 AI TEDDY</span><h2>Your friendly Teddy.</h2><p>Ask a question, then turn the answer into an explanation, MCQs, flashcards or exam notes.</p></div>
+    <div class="ai-home-card">
+      <div class="ai-home-top"><div class="ai-avatar large">🧸</div><div><span class="mini-label">STUDENT HUB AI</span><h3>Hey! I'm ready when you are. 👋</h3><p>What are you stuck on today?</p></div><span class="online-dot">● Online</span></div>
+      <form class="ai-home-search" action="{{ url_for('teddy.chat_page') }}" method="get"><span>⌕</span><input name="prompt" required placeholder="Ask Teddy anything — explain integration, solve 2x + 5 = 15..." autocomplete="off"><button type="submit">Ask AI <span>→</span></button></form>
+      <div class="suggestions"><span>Try asking</span><a href="{{ url_for('teddy.chat_page') }}?prompt=Explain+integration">Explain integration</a><a href="{{ url_for('teddy.chat_page') }}?prompt=Solve+2x+5%3D15">Solve 2x + 5 = 15</a><a href="{{ url_for('teddy.chat_page') }}?prompt=Teach+me+recursion">Teach me recursion</a><a href="{{ url_for('teddy.chat_page') }}?prompt=Make+MCQs+about+Newton%27s+First+Law">Make MCQs</a></div>
+    </div>
+  </div>
+</section>
+
+<section class="feature-section" id="tools"><div class="section-container">
+  <div class="section-heading"><span class="eyebrow-pill">⚡ STUDENT TOOLKIT</span><h2>Everything you need, in one place.</h2><p>Useful tools for the everyday moments between classes, assignments and exams.</p></div>
+  <div class="feature-grid">
+    <a class="feature-card feature-ai" href="{{ url_for('teddy.chat_page') }}"><span class="feature-icon">🧠</span><div><h3>AI Teddy</h3><p>Understand difficult topics with patient, step-by-step explanations.</p></div><span class="feature-arrow">→</span></a>
+    <a class="feature-card" href="{{ url_for('main.calculators') }}"><span class="feature-icon">🧮</span><div><h3>Smart Calculators</h3><p>GPA, CGPA, percentage, attendance, age, scientific and more.</p></div><span class="feature-arrow">→</span></a>
+    <a class="feature-card" href="{{ url_for('search.search_page') }}"><span class="feature-icon">🔎</span><div><h3>Study Search</h3><p>Search a question and get organized study notes with useful sources.</p></div><span class="feature-arrow">→</span></a>
+    <a class="feature-card" href="{{ url_for('main.notes') }}"><span class="feature-icon">🗂️</span><div><h3>Notes Organizer</h3><p>Keep your ideas, revision notes and important topics easy to find.</p></div><span class="feature-arrow">→</span></a>
+    <a class="feature-card" href="{{ url_for('main.timetable') }}"><span class="feature-icon">🗓️</span><div><h3>Study Timetable</h3><p>Plan focused study blocks and build a routine that works for you.</p></div><span class="feature-arrow">→</span></a>
+    <a class="feature-card" href="{{ url_for('coding.coding_page') }}"><span class="feature-icon">💻</span><div><h3>Coding Playground</h3><p>Write, run and improve code while learning programming concepts.</p></div><span class="feature-arrow">→</span></a>
+    <a class="feature-card" href="{{ url_for('main.resume_builder') }}"><span class="feature-icon">📄</span><div><h3>Resume Builder</h3><p>Create a clean student resume and preview it instantly.</p></div><span class="feature-arrow">→</span></a>
+    <a class="feature-card" href="{{ url_for('main.pdf_tools') }}"><span class="feature-icon">📑</span><div><h3>PDF Tools</h3><p>Merge PDFs and extract text without installing another app.</p></div><span class="feature-arrow">→</span></a>
+  </div>
+</div></section>
+
+<section class="steps-section"><div class="section-container"><div class="section-heading centered"><span class="eyebrow-pill">HOW IT WORKS</span><h2>From stuck to sorted.</h2></div><div class="steps-grid"><div><span>01</span><h3>Ask</h3><p>Search any question, concept or problem.</p></div><div><span>02</span><h3>Understand</h3><p>Get clear notes and step-by-step reasoning.</p></div><div><span>03</span><h3>Practice</h3><p>Turn the topic into MCQs, questions or flashcards.</p></div><div><span>04</span><h3>Improve</h3><p>Keep learning until the topic finally clicks.</p></div></div></div></section>
+{% endblock %}

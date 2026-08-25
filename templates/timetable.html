@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Study Timetable — Student Hub{% endblock %}
+{% block content %}
+<section class="calc-page"><div class="calc-inner">
+  <div class="section-head"><span class="section-tab">planner</span><h1>Study Timetable</h1></div>
+  <p class="calc-hint">Add study blocks and keep the timetable on this device. No account is required.</p>
+  <article class="calc-card">
+    <div class="calc-row two-col"><div><label for="tt-day">Day</label><select id="tt-day"><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></div><div><label for="tt-time">Time</label><input id="tt-time" type="time"></div></div>
+    <div class="calc-row two-col"><div><label for="tt-subject">Subject</label><input id="tt-subject" placeholder="Mathematics"></div><div><label for="tt-duration">Duration (minutes)</label><input id="tt-duration" type="number" value="60" min="5"></div></div>
+    <button class="primary-btn" id="tt-add">Add study block</button>
+  </article>
+  <article class="calc-card"><div class="calc-card-tab">Your timetable</div><div id="tt-list" class="planner-list"></div></article>
+</div></section>
+{% endblock %}
+{% block scripts %}<script>
+(function(){const key='sh-timetable';let items=JSON.parse(localStorage.getItem(key)||'[]');const list=document.getElementById('tt-list');function render(){items.sort((a,b)=>(a.day+a.time).localeCompare(b.day+b.time));list.innerHTML=items.length?items.map((x,i)=>`<div class="planner-item"><strong>${x.day} · ${x.time||'Any time'}</strong><span>${x.subject} · ${x.duration} min</span><button class="ghost-btn" data-i="${i}">Remove</button></div>`).join(''):'<p class="calc-hint">No study blocks yet.</p>';list.querySelectorAll('[data-i]').forEach(b=>b.onclick=()=>{items.splice(+b.dataset.i,1);save();});}function save(){localStorage.setItem(key,JSON.stringify(items));render();}document.getElementById('tt-add').onclick=()=>{const subject=document.getElementById('tt-subject').value.trim();if(!subject)return alert('Enter a subject first.');items.push({day:document.getElementById('tt-day').value,time:document.getElementById('tt-time').value,subject,duration:document.getElementById('tt-duration').value});document.getElementById('tt-subject').value='';save();};render();})();
+</script>{% endblock %}

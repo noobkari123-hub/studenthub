@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ "Log In" if mode == "login" else "Create Account" }} — Student Hub{% endblock %}
+{% block content %}
+<section class="auth-page-modern">
+  <div class="auth-showcase">
+    <div class="showcase-orbit"><span>🧠</span><span>✨</span><span>📚</span><span>🎯</span></div>
+    <span class="eyebrow-pill">STUDENT HUB</span>
+    <h1>{{ "Welcome back" if mode == "login" else "Join Student Hub" }} <span>{{ "👋" if mode == "login" else "🚀" }}</span></h1>
+    <p>{{ "Your smarter study journey starts here." if mode == "login" else "Create your free account and unlock your personal AI Teddy." }}</p>
+    <div class="auth-features"><div><b>✓</b><span>AI Teddy<small>Patient, step-by-step tutoring</small></span></div><div><b>✓</b><span>Personalized help<small>Keep your study journey together</small></span></div><div><b>✓</b><span>Practice & revision<small>MCQs, flashcards and exam notes</small></span></div></div>
+    <div class="showcase-quote">“No worries — difficult topics become easier when we break them down together.”</div>
+  </div>
+  <div class="auth-card-modern">
+    <div class="auth-card-top"><span class="auth-mini-icon">{{ "👋" if mode == "login" else "🎓" }}</span><div><span class="eyebrow-pill">{{ "WELCOME BACK" if mode == "login" else "GET STARTED" }}</span><h2>{{ "Log in to keep learning" if mode == "login" else "Create your account" }}</h2></div></div>
+    <p class="auth-subtitle">{{ "Log in to continue learning smarter with Student Hub." if mode == "login" else "It only takes a minute to get started." }}</p>
+    {% with messages = get_flashed_messages(with_categories=true) %}{% if messages %}<div class="flash-list">{% for category, message in messages %}<div class="flash {{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}{% endwith %}
+    <form method="post" class="auth-form-modern" novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}"><input type="hidden" name="next" value="{{ next_url }}">
+      {% if mode == "signup" %}<label>Name<span class="input-wrap"><span>👤</span><input name="name" autocomplete="name" placeholder="Your full name" value="{{ request.form.get('name','') }}" required></span></label>{% endif %}
+      <label>Email<span class="input-wrap"><span>✉️</span><input type="email" name="email" autocomplete="email" placeholder="you@example.com" value="{{ request.form.get('email','') }}" required></span></label>
+      <label>Password<span class="input-wrap"><span>🔒</span><input id="auth-password" type="password" name="password" autocomplete="{{ 'new-password' if mode == 'signup' else 'current-password' }}" placeholder="{{ 'At least 8 characters' if mode == 'signup' else 'Your password' }}" required><button type="button" class="password-toggle" data-target="auth-password">Show</button></span></label>
+      {% if mode == "signup" %}<label>Confirm Password<span class="input-wrap"><span>✓</span><input id="auth-confirm" type="password" name="confirm_password" autocomplete="new-password" placeholder="Re-enter your password" required><button type="button" class="password-toggle" data-target="auth-confirm">Show</button></span></label>{% endif %}
+      <button class="auth-primary" type="submit">{{ "Log In" if mode == "login" else "Create Free Account" }} <span>→</span></button>
+    </form>
+    {% if config.GOOGLE_CLIENT_ID and config.GOOGLE_CLIENT_SECRET %}
+    <div class="auth-divider"><span>or continue with</span></div>
+    <a class="google-btn-modern" href="{{ url_for('main.google_login', next=next_url) }}"><span class="google-g">G</span><span>Continue with Google</span></a>
+    {% endif %}
+    <p class="auth-switch">{% if mode == "login" %}New to Student Hub? <a href="{{ url_for('main.signup', next=next_url) }}">Create a free account</a>{% else %}Already have an account? <a href="{{ url_for('main.login', next=next_url) }}">Log in</a>{% endif %}</p>
+    <p class="auth-trust">🔒 Your password is securely hashed and never stored as plain text.</p>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}<script>
+(function(){document.querySelectorAll('.password-toggle').forEach(function(btn){btn.addEventListener('click',function(){var input=document.getElementById(btn.dataset.target);if(!input)return;var show=input.type==='password';input.type=show?'text':'password';btn.textContent=show?'Hide':'Show';});});})();
+</script>{% endblock %}

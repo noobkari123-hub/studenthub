@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}PDF Tools — Student Hub{% endblock %}
+{% block content %}
+<section class="calc-page"><div class="calc-inner">
+  <div class="section-head"><span class="section-tab">pdf</span><h1>PDF Tools</h1></div>
+  <p class="calc-hint">Use your browser to send selected PDF files to Student Hub for the requested operation. Files are processed for the operation and are not added to your study library.</p>
+  <article class="calc-card"><div class="calc-card-tab">Merge PDFs</div><p class="calc-hint">Choose two or more PDFs and download one combined PDF.</p><input id="merge-files" type="file" accept="application/pdf" multiple><br><br><button class="primary-btn" id="merge-btn">Merge PDFs</button><div id="merge-msg" class="calc-result" hidden></div></article>
+  <article class="calc-card"><div class="calc-card-tab">Extract PDF text</div><input id="extract-file" type="file" accept="application/pdf"><br><br><button class="primary-btn" id="extract-btn">Extract Text</button><textarea id="extract-output" class="pdf-text-output" rows="14" readonly placeholder="Extracted text will appear here..."></textarea></article>
+</div></section>
+{% endblock %}
+{% block scripts %}<script>
+(function(){document.getElementById('merge-btn').onclick=async()=>{const files=document.getElementById('merge-files').files,msg=document.getElementById('merge-msg');if(files.length<2){msg.hidden=false;msg.textContent='Choose at least two PDF files.';return;}const fd=new FormData();[...files].forEach(f=>fd.append('files',f));msg.hidden=false;msg.textContent='Merging…';const r=await fetch('/api/pdf/merge',{method:'POST',body:fd});if(!r.ok){const d=await r.json().catch(()=>({}));msg.textContent=d.error||'Merge failed.';return;}const blob=await r.blob();const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='student-hub-merged.pdf';a.click();URL.revokeObjectURL(a.href);msg.textContent='Merged successfully.';};document.getElementById('extract-btn').onclick=async()=>{const f=document.getElementById('extract-file').files[0],out=document.getElementById('extract-output');if(!f){out.value='Choose a PDF first.';return;}const fd=new FormData();fd.append('file',f);out.value='Extracting…';const r=await fetch('/api/pdf/extract',{method:'POST',body:fd});const d=await r.json().catch(()=>({}));out.value=r.ok?(d.text||'No extractable text was found.'):(d.error||'Extraction failed.');};})();
+</script>{% endblock %}

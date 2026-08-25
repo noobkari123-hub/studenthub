@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Resume Builder — Student Hub{% endblock %}
+{% block content %}
+<section class="calc-page"><div class="calc-inner">
+  <div class="section-head"><span class="section-tab">career</span><h1>Resume Builder</h1></div>
+  <p class="calc-hint">Fill in the fields, preview your resume, then use your browser's Print → Save as PDF.</p>
+  <article class="calc-card resume-form"><div class="calc-row two-col"><div><label>Name</label><input id="r-name" placeholder="Your name"></div><div><label>Role / Degree</label><input id="r-role" placeholder="B.Tech AI & Data Science Student"></div></div><div class="calc-row two-col"><div><label>Email</label><input id="r-email"></div><div><label>Phone</label><input id="r-phone"></div></div><div class="calc-row"><label>Summary</label><textarea id="r-summary" rows="4" placeholder="A short professional summary"></textarea></div><div class="calc-row"><label>Education</label><textarea id="r-education" rows="4" placeholder="Degree, college, year, marks/GPA"></textarea></div><div class="calc-row"><label>Skills</label><textarea id="r-skills" rows="3" placeholder="Python, SQL, Data Analysis"></textarea></div><div class="calc-row"><label>Projects / Experience</label><textarea id="r-projects" rows="5" placeholder="Project or experience details"></textarea></div><button class="primary-btn" id="r-build">Update preview</button></article>
+  <article class="calc-card resume-preview" id="resume-preview"><h2>Your Name</h2><p class="resume-role">Your role</p><p>Email · Phone</p><hr><h3>Summary</h3><p>Add your summary.</p><h3>Education</h3><p>Add your education.</p><h3>Skills</h3><p>Add your skills.</p><h3>Projects / Experience</h3><p>Add your projects or experience.</p></article>
+</div></section>
+{% endblock %}
+{% block scripts %}<script>
+(function(){function val(id){return document.getElementById(id).value.trim();}function build(){const name=val('r-name')||'Your Name',role=val('r-role')||'Your role',email=val('r-email')||'Email',phone=val('r-phone')||'Phone',summary=val('r-summary')||'Add your summary.',edu=val('r-education')||'Add your education.',skills=val('r-skills')||'Add your skills.',projects=val('r-projects')||'Add your projects or experience.';document.getElementById('resume-preview').innerHTML=`<h2>${name}</h2><p class="resume-role">${role}</p><p>${email} · ${phone}</p><hr><h3>Summary</h3><p>${summary.replace(/\n/g,'<br>')}</p><h3>Education</h3><p>${edu.replace(/\n/g,'<br>')}</p><h3>Skills</h3><p>${skills.replace(/\n/g,'<br>')}</p><h3>Projects / Experience</h3><p>${projects.replace(/\n/g,'<br>')}</p>`;}document.getElementById('r-build').onclick=build;})();
+</script>{% endblock %}
